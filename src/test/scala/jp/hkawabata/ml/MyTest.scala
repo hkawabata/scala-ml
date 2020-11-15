@@ -88,8 +88,8 @@ class MyTest extends AnyWordSpec {
     // データ作成
     val data = DenseMatrix.horzcat(
       DataGenerator.circle(1, 100),
-      DataGenerator.circle(1, 100, (1.7, 1.0)),
-      DataGenerator.circle(1, 100, (1.7, -1.0))
+      DataGenerator.circle(1, 100, (1.5, 0.9)),
+      DataGenerator.circle(1, 100, (1.5, -0.9))
     )
     val labels: List[String] = List.fill(100)("A") ++ List.fill(100)("B") ++ List.fill(100)("C")
 
@@ -110,7 +110,7 @@ class MyTest extends AnyWordSpec {
     val costEvaluator = new CostEvaluator(y)
 
     // 学習
-    (0 to 100).foreach {
+    (0 to 200).foreach {
       t =>
         var out = data.copy
         layers.foreach(l => out = l.forward(out))
