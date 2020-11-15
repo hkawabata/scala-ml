@@ -26,6 +26,24 @@ class MyTest extends AnyWordSpec {
       (1.0, 4.0, 2.0),
       (4.0, 3.0, 5.0)
     )
+    val d: DenseMatrix[((Int, Int, Int), (Int, Int, Int))] = DenseMatrix(
+      (
+        (
+          (1,2,3), (4,5,6)
+        ),
+        (
+          (7,8,9), (0,1,2)
+        )
+      ),
+      (
+        (
+          (3,4,5), (6,7,8)
+        ),
+        (
+          (9,0,1), (2,3,4)
+        )
+      )
+    )
     val i = DenseMatrix.eye[Double](3)
     val one = DenseMatrix.ones[Double](2, 3)
     val z = DenseMatrix.zeros[Double](4, 5)
@@ -36,6 +54,8 @@ class MyTest extends AnyWordSpec {
     println(b)
     println("---------- 3x3 行列 C ----------")
     println(c)
+    println("---------- 3x2x2x2 配列 D ----------")
+    println(d)
     println("---------- ベクトル v ----------")
     println(v)
     println("---------- 単位行列 I ----------")
