@@ -43,9 +43,9 @@ class MyTest extends AnyWordSpec {
     println("---------- 要素に定数を足す ----------")
     println(a + 1.0)
     println("---------- 行列の全ての列に同じベクトルを足す ----------")
-    println(s"$b + $v\n-->\n${b(::, *) + v}")
-    println("---------- 行列の全ての列に同じベクトルをかける ----------")
-    println(s"$b * $v\n-->\n${b(::, *) * v}")
+    println(s"$b, $v\n-->\n${b(::, *) + v}")
+    println("---------- 行列の全ての行に同じベクトルを足す ----------")
+    println(s"$a, $v\n-->\n${a(*, ::) + v}")
     println("---------- 行列をベクトルにかける ----------")
     println(a * v)
 
