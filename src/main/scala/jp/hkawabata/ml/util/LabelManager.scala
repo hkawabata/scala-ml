@@ -9,7 +9,7 @@ class LabelManager[T](val labels: List[T]) {
     val result = DenseMatrix.zeros[Double](uniqueLabels.size, labels.size)
     labels.zipWithIndex.foreach{
       case (label, i) =>
-        result.update(label2Index(label), i, 1.0)
+        result(label2Index(label), i) = 1.0
     }
     result
   }

@@ -1,6 +1,6 @@
 package jp.hkawabata.ml
 
-import breeze.linalg.{*, Axis, DenseMatrix, DenseVector, sum}
+import breeze.linalg.{*, Axis, DenseMatrix, DenseVector, det, eig, inv, sum}
 import jp.hkawabata.ml.deeplearning.model.dnn.CostEvaluator
 import jp.hkawabata.ml.deeplearning.model.dnn.layer.{AffineLayer, Layer, SigmoidActivationLayer, SoftMaxLayer}
 import jp.hkawabata.ml.util.{DataGenerator, LabelManager}
@@ -21,15 +21,33 @@ class MyTest extends AnyWordSpec {
       (4.0, 7.0),
       (-3.0, 2.0)
     )
-    val z = DenseMatrix.zeros[Double](3, 2)
+    val c = DenseMatrix(
+      (1.0, 2.0, 3.0),
+      (1.0, 4.0, 2.0),
+      (4.0, 3.0, 5.0)
+    )
+    val i = DenseMatrix.eye[Double](3)
+    val one = DenseMatrix.ones[Double](2, 3)
+    val z = DenseMatrix.zeros[Double](4, 5)
 
     println("---------- 2x3 行列 A ----------")
     println(a)
     println("---------- 3x2 行列 B ----------")
     println(b)
+    println("---------- 3x3 行列 C ----------")
+    println(c)
     println("---------- ベクトル v ----------")
     println(v)
+    println("---------- 単位行列 I ----------")
+    println(i)
+    println("---------- 全てが1の行列 ----------")
+    println(one)
     println("---------- ゼロ行列 Z ----------")
+    println(z)
+    println("---------- ゼロ行列 Z の値を更新 ----------")
+    z(0, 1) = 1.0
+    z(::, 0) := 2.0
+    z(1 to 2, 2 to 3) := 3.0
     println(z)
     println("---------- 行列の和 ----------")
     println(a + b.t)
@@ -48,6 +66,13 @@ class MyTest extends AnyWordSpec {
     println(s"$a, $v\n-->\n${a(*, ::) + v}")
     println("---------- 行列をベクトルにかける ----------")
     println(a * v)
+    println("---------- C の逆行列 ----------")
+    println(s"$c\nx\n${inv(c)}\n=\n${c * inv(c)}")
+    println("---------- C の行列式 ----------")
+    println(det(c))
+    println("---------- C の固有値、固有ベクトル ----------")
+    println(eig(c).eigenvalues)
+    println(eig(c).eigenvectors)
 
     println("---------- 要素全ての和を取る ----------")
     println(s"$a\n--> ${sum(a)}")
