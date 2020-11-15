@@ -1,6 +1,6 @@
 package jp.hkawabata.ml.deeplearning.model.dnn.layer
 
-import breeze.linalg._
+import breeze.linalg.DenseMatrix
 
 class SigmoidActivationLayer extends Layer {
   var sigmoid: Option[DenseMatrix[Double]] = None
@@ -11,15 +11,9 @@ class SigmoidActivationLayer extends Layer {
   }
 
   def backward(dout: DenseMatrix[Double]): DenseMatrix[Double] = {
-    println(dout.rows)
-    println(dout.cols)
-
     val dphi: DenseMatrix[Double] = sigmoid.get.map(x => x * (1.0 - x))
-
     val din: DenseMatrix[Double] = dout *:* dphi
-
     sigmoid = None
-
     din
   }
 }
