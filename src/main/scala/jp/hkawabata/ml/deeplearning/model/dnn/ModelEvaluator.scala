@@ -4,7 +4,7 @@ import breeze.linalg.{Axis, DenseMatrix, argmax, sum}
 
 import scala.collection.mutable.ListBuffer
 
-class CostEvaluator(val correctLabels: DenseMatrix[Double]) {
+class ModelEvaluator(val correctLabels: DenseMatrix[Double]) {
   val costBuff = new ListBuffer[Double]
   val precisionBuff = new ListBuffer[Double]
 

@@ -1,7 +1,7 @@
 package jp.hkawabata.ml.deeplearning.model.dnn.model
 
 import breeze.linalg.{Axis, DenseMatrix, argmax}
-import jp.hkawabata.ml.deeplearning.model.dnn.CostEvaluator
+import jp.hkawabata.ml.deeplearning.model.dnn.ModelEvaluator
 import jp.hkawabata.ml.deeplearning.model.dnn.layer.{AffineLayer, Layer, SigmoidActivationLayer, SoftMaxLayer}
 import jp.hkawabata.ml.util.LabelManager
 
@@ -29,7 +29,7 @@ class DNN(val eta: Double, val numHiddenLayers: Int, val numHiddenNodes: Int, va
     val nLabels = y.rows
 
     // 評価器
-    val costEvaluator = new CostEvaluator(y)
+    val costEvaluator = new ModelEvaluator(y)
 
     // 学習アーキテクチャの定義
     val layersBuff = new ListBuffer[Layer]
