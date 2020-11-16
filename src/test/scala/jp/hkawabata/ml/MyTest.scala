@@ -2,7 +2,7 @@ package jp.hkawabata.ml
 
 import breeze.linalg._
 import breeze.plot._
-import jp.hkawabata.ml.deeplearning.model.dnn.model.DNN
+import jp.hkawabata.ml.deeplearning.model.dnn.DNN
 import jp.hkawabata.ml.util.DataGenerator
 import org.jfree.chart.axis.NumberTickUnit
 import org.scalatest.wordspec.AnyWordSpec
