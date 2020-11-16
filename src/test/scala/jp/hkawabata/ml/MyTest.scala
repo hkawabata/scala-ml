@@ -1,9 +1,12 @@
 package jp.hkawabata.ml
 
-import breeze.linalg.{*, Axis, DenseMatrix, DenseVector, det, eig, inv, sum}
+import breeze.linalg._
+import breeze.plot._
 import jp.hkawabata.ml.deeplearning.model.dnn.CostEvaluator
 import jp.hkawabata.ml.deeplearning.model.dnn.layer.{AffineLayer, Layer, SigmoidActivationLayer, SoftMaxLayer}
+import jp.hkawabata.ml.deeplearning.model.dnn.model.DNN
 import jp.hkawabata.ml.util.{DataGenerator, LabelManager}
+import org.jfree.chart.axis.NumberTickUnit
 import org.scalatest.wordspec.AnyWordSpec
 
 class MyTest extends AnyWordSpec {
@@ -133,48 +136,30 @@ class MyTest extends AnyWordSpec {
     // データ作成
     val data = DenseMatrix.horzcat(
       DataGenerator.circle(1, 100),
-      DataGenerator.circle(1, 100, (1.5, 0.9)),
-      DataGenerator.circle(1, 100, (1.5, -0.9))
+      DataGenerator.circle(1, 100, (1.6, 0.9)),
+      DataGenerator.circle(1, 100, (1.6, -0.9))
     )
     val labels: List[String] = List.fill(100)("A") ++ List.fill(100)("B") ++ List.fill(100)("C")
 
-    // 前処理
-    val labelManager = new LabelManager[String](labels)
-    val y: DenseMatrix[Double] = labelManager.labelMatrix
+    // モデルを学習
+    val model = new DNN(eta = 0.5, numHiddenLayers = 2, numHiddenNodes = 5, epochs = 1000)
+    model.fit(data, labels)
 
-    // モデルアーキテクチャの定義
-    val eta: Double = 1.0
-    val numHiddenNodes: Int = 5
-    val layers: Seq[Layer] = List(
-      new AffineLayer(2, numHiddenNodes),
-      new SigmoidActivationLayer,
-      new AffineLayer(numHiddenNodes, labelManager.numUniqueLabels),
-      new SigmoidActivationLayer,
-      new SoftMaxLayer
-    )
-    val costEvaluator = new CostEvaluator(y)
-
-    // 学習
-    (0 to 200).foreach {
-      t =>
-        var out = data.copy
-        layers.foreach(l => out = l.forward(out))
-        costEvaluator.evaluate(out)
-        var error = costEvaluator.error * eta
-        if (t % 10 == 0) {
-          println(s"cost : ${costEvaluator.costBuff.last}, precision: ${costEvaluator.precisionBuff.last}")
-        }
-        layers.reverseIterator.foreach(l => error = l.backward(error))
-    }
-
-    // precision の推移を可視化
-    val size = costEvaluator.precisionBuff.size
-    costEvaluator.precisionBuff.result.zipWithIndex.foreach{
-      case (p, i) =>
-        if (i % (size / 20) == 0) {
-          val n = (p * 50).toInt
-          println("*" * n + "." * (50 - n))
-        }
-    }
+    // 学習過程を可視化
+    val cost = DenseVector(model.getCost: _*)
+    val precision = DenseVector(model.getPrecision: _*)
+    val epochs: DenseVector[Double] = DenseVector((0 until precision.length).map(_.toDouble): _*)
+    val f = Figure()
+    val p1 = f.subplot(1, 2, 0)
+    p1.title = "Precision"
+    p1.xlabel = "epochs"
+    p1.ylim(0, 1.0)
+    p1.yaxis.setTickUnit(new NumberTickUnit(0.1))
+    p1 += plot(epochs, precision, '-')
+    val p2 = f.subplot(1, 2, 1)
+    p2.title = "Cost"
+    p2.xlabel = "epochs"
+    p2 += plot(epochs, cost)
+    f.saveas("target/dnn.png")
   }
 }

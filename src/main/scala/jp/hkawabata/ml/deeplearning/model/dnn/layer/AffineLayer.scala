@@ -4,12 +4,12 @@ import breeze.linalg.{*, Axis, DenseMatrix, DenseVector, sum}
 import breeze.stats.distributions.Gaussian
 
 class AffineLayer(nFeatures: Int, nNewFeatures: Int) extends Layer {
-  val W: DenseMatrix[Double] = DenseMatrix.rand(nNewFeatures, nFeatures, Gaussian(0, 1))
-  val b: DenseVector[Double] = DenseVector.rand(nNewFeatures, Gaussian(0, 1))
-  var x: Option[DenseMatrix[Double]] = None
+  private val W: DenseMatrix[Double] = DenseMatrix.rand(nNewFeatures, nFeatures, Gaussian(0, 1))
+  private val b: DenseVector[Double] = DenseVector.rand(nNewFeatures, Gaussian(0, 1))
+  private var x: Option[DenseMatrix[Double]] = None
 
-  def forward(in: DenseMatrix[Double]): DenseMatrix[Double] = {
-    x = Some(in.copy)
+  def forward(in: DenseMatrix[Double], isTraining: Boolean): DenseMatrix[Double] = {
+    if (isTraining) x = Some(in.copy)
     val tmp = W * in
     tmp(::, *) + b
   }

@@ -3,13 +3,13 @@ package jp.hkawabata.ml.deeplearning.model.dnn.layer
 import breeze.linalg.{*, Axis, DenseMatrix, sum}
 
 class SoftMaxLayer extends Layer {
-  var z: Option[DenseMatrix[Double]] = None
+  private var z: Option[DenseMatrix[Double]] = None
 
-  def forward(in: DenseMatrix[Double]): DenseMatrix[Double] = {
+  def forward(in: DenseMatrix[Double], isTraining: Boolean): DenseMatrix[Double] = {
     val tmp_a = in.map(x => math.exp(x))
     val tmp_v = sum(tmp_a, Axis._0)
     val out = tmp_a(*, ::) / tmp_v.inner
-    z = Some(out.copy)
+    if (isTraining) z = Some(out)
     out
   }
 

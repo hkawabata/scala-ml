@@ -3,11 +3,12 @@ package jp.hkawabata.ml.deeplearning.model.dnn.layer
 import breeze.linalg.DenseMatrix
 
 class SigmoidActivationLayer extends Layer {
-  var sigmoid: Option[DenseMatrix[Double]] = None
+  private var sigmoid: Option[DenseMatrix[Double]] = None
 
-  def forward(in: DenseMatrix[Double]): DenseMatrix[Double] = {
-    sigmoid = Some(in.map(x => 1.0 / (1.0 + math.exp(-x))))
-    sigmoid.get
+  def forward(in: DenseMatrix[Double], isTraining: Boolean): DenseMatrix[Double] = {
+    val out = in.map(x => 1.0 / (1.0 + math.exp(-x)))
+    if (isTraining) sigmoid = Some(out)
+    out
   }
 
   def backward(dout: DenseMatrix[Double]): DenseMatrix[Double] = {
