@@ -1,6 +1,6 @@
 package jp.hkawabata.ml.deeplearning.model.dnn.model
 
-import breeze.linalg.{Axis, DenseMatrix, DenseVector, argmax}
+import breeze.linalg.{Axis, DenseMatrix, argmax}
 import jp.hkawabata.ml.deeplearning.model.dnn.CostEvaluator
 import jp.hkawabata.ml.deeplearning.model.dnn.layer.{AffineLayer, Layer, SigmoidActivationLayer, SoftMaxLayer}
 import jp.hkawabata.ml.util.LabelManager
