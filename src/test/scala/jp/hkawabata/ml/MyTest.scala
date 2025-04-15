@@ -160,4 +160,29 @@ class MyTest extends AnyWordSpec {
     p2 += plot(epochs, cost)
     f.saveas("target/dnn.png")
   }
+
+  "Breeze Viz" in {
+    val x: DenseVector[Double] = DenseVector(0 to 100: _*).map(_ * 0.02)
+
+    val f = Figure()
+
+    val p1 = f.subplot(1, 2, 0)
+    p1.title = "Graph 1"
+    p1.xlabel = "X"
+    p1.ylabel = "Y"
+    p1.xaxis.setTickUnit(new NumberTickUnit(0.2))
+    p1.yaxis.setTickUnit(new NumberTickUnit(1.0))
+    p1 += plot(x, x ^:^ 2.0, name = "Y = X^2")
+    p1 += plot(x, x ^:^ 3.0, name = "Y = X^3", style = '.')
+    p1.legend = true
+
+    val p2 = f.subplot(1, 2, 1)
+    p2.title = "Graph 2"
+    p2.xlabel = "X"
+    p2.ylabel = "Frequency of X"
+    val g = breeze.stats.distributions.Gaussian(0,1)
+    p2 += hist(g.sample(100000),100)
+
+    f.saveas("target/sample.png")
+  }
 }
